@@ -1,0 +1,36 @@
+# prometheus/prometheus.yml
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds (default)
+  evaluation_interval: 15s # Evaluate rules every 15 seconds
+  scrape_timeout: 10s # Timeout before considering a scrape failed
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Rule files to load
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Scrape configuration for the e-commerce API
+  - job_name: "ecommerce-api"
+    metrics_path: /metrics
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["ecommerce-api:3000"]
+        labels:
+          service: "ecommerce-api"
+          environment: "production"
